@@ -24,7 +24,7 @@ export function Sidebar({
   onSoundEnabledChange,
 }: SidebarProps) {
   return (
-    <div className="w-64 bg-terminal-sidebar border-r border-gray-800 flex flex-col p-4">
+    <div className="w-64 bg-black border-r border-gray-900 flex flex-col p-4 font-mono">
       <div className="mb-6 flex items-center gap-2">
         <span className="text-terminal-orange text-xl">📻</span>
         <h1 className="text-lg font-bold text-terminal-orange tracking-wider">MORSE CHAT</h1>

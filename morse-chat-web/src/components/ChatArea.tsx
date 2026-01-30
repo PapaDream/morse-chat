@@ -60,16 +60,16 @@ export function ChatArea({ messages, onSendMessage, autoScroll, soundEnabled = t
   };
 
   return (
-    <div className="flex-1 flex flex-col bg-gray-900">
+    <div className="flex-1 flex flex-col bg-black font-mono">
       {/* Messages Area */}
-      <div className="flex-1 overflow-y-auto p-4 bg-gray-900">
+      <div className="flex-1 overflow-y-auto p-4 bg-black">
         {messages.map((msg) => (
-          <div key={msg.id} className={`mb-4 flex ${msg.isOwn ? 'justify-end' : 'justify-start'}`}>
+          <div key={msg.id} className={`mb-3 flex ${msg.isOwn ? 'justify-end' : 'justify-start'}`}>
             <div 
-              className={`max-w-xl rounded-lg p-3 ${
+              className={`max-w-xl rounded-lg p-3 border ${
                 msg.isOwn 
-                  ? 'bg-orange-900 bg-opacity-50' 
-                  : 'bg-gray-800 bg-opacity-50'
+                  ? 'bg-bubble-own border-orange-900' 
+                  : 'bg-bubble-other border-gray-800'
               } ${soundEnabled ? 'cursor-pointer hover:opacity-80' : ''}`}
               onClick={() => handleMessageClick(msg.message)}
               title={soundEnabled ? 'Click to hear Morse code' : ''}
@@ -77,10 +77,10 @@ export function ChatArea({ messages, onSendMessage, autoScroll, soundEnabled = t
               <div className="text-terminal-orange text-sm mb-1">
                 {msg.message}
               </div>
-              <div className="text-xs text-gray-500 mb-2">
+              <div className="text-xs text-gray-600 mb-2 font-mono">
                 {msg.morse}
               </div>
-              <div className="text-xs text-gray-600 text-right">
+              <div className="text-xs text-gray-700 text-right">
                 {formatTime(msg.timestamp)}
               </div>
             </div>
@@ -90,14 +90,14 @@ export function ChatArea({ messages, onSendMessage, autoScroll, soundEnabled = t
       </div>
 
       {/* Input Area */}
-      <div className="bg-gray-900 border-t border-gray-800 p-4">
+      <div className="bg-black border-t border-gray-900 p-4">
         <form onSubmit={handleSubmit} className="flex gap-3 items-center">
           <input
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Type your message..."
-            className="flex-1 bg-gray-800 text-terminal-orange border border-gray-700 rounded px-4 py-3 text-sm placeholder-gray-600 focus:outline-none focus:border-terminal-orange"
+            className="flex-1 bg-gray-900 text-terminal-orange border border-gray-800 rounded px-4 py-3 text-sm placeholder-gray-700 focus:outline-none focus:border-terminal-orange font-mono"
           />
           <button
             type="submit"
