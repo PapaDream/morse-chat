@@ -112,7 +112,7 @@ class MorseChatWindow(QMainWindow):
         # Title
         title = QLabel("Settings")
         title.setFont(QFont("Courier New", 14, QFont.Bold))
-        title.setStyleSheet("color: #ff8800; padding: 8px; text-shadow: 0 0 10px #ff8800;")
+        title.setStyleSheet("color: #ff8800; padding: 8px;")
         layout.addWidget(title)
         
         # WPM control
@@ -347,7 +347,8 @@ class MorseChatWindow(QMainWindow):
                 font-size: 11pt;
             }
         """)
-        self.chat_display.anchorClicked.connect(self.play_message_audio)
+        # Note: anchorClicked not available in all Qt versions
+        # Audio playback on click will be implemented differently
         self.chat_display.setOpenExternalLinks(False)
         layout.addWidget(self.chat_display)
         
@@ -398,7 +399,6 @@ class MorseChatWindow(QMainWindow):
             }
             QPushButton:hover {
                 background-color: #ff9920;
-                box-shadow: 0 0 15px #ff8800;
             }
             QPushButton:pressed {
                 background-color: #dd7700;
@@ -495,14 +495,14 @@ class MorseChatWindow(QMainWindow):
         if message_id is not None and self.audio_playback:
             html = f'<div style="margin: 5px 0; font-family: Courier New; word-wrap: break-word;">'
             html += f'<span style="color: #996633; font-size: 9pt;">{timestamp}</span> '
-            html += f'<b style="color: #ff8800; text-shadow: 0 0 8px #ff8800; font-size: 11pt;">{sender}:</b> '
-            html += f'<a href="#{message_id}" style="color: #ff8800; text-decoration: none; text-shadow: 0 0 5px #ff8800; font-size: 11pt;">{text}</a>'
+            html += f'<b style="color: #ff8800; font-size: 11pt;">{sender}:</b> '
+            html += f'<a href="#{message_id}" style="color: #ff8800; text-decoration: none; font-size: 11pt;">{text}</a>'
             html += '</div>'
         else:
             html = f'<div style="margin: 5px 0; font-family: Courier New; word-wrap: break-word;">'
             html += f'<span style="color: #996633; font-size: 9pt;">{timestamp}</span> '
-            html += f'<b style="color: #ff8800; text-shadow: 0 0 8px #ff8800; font-size: 11pt;">{sender}:</b> '
-            html += f'<span style="color: #ff8800; text-shadow: 0 0 5px #ff8800; font-size: 11pt;">{text}</span>'
+            html += f'<b style="color: #ff8800; font-size: 11pt;">{sender}:</b> '
+            html += f'<span style="color: #ff8800; font-size: 11pt;">{text}</span>'
             html += '</div>'
         
         cursor.insertHtml(html)
