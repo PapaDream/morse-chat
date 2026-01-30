@@ -32,7 +32,7 @@ export function Sidebar({
   return (
     <div className="w-64 bg-black border-r border-gray-900 flex flex-col p-4 font-mono">
       <div className="mb-6 flex items-center gap-2">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="text-terminal-orange flex-shrink-0">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" className="text-terminal-orange flex-shrink-0">
           <circle cx="12" cy="12" r="2" fill="currentColor"/>
           <path d="M 8.5 8.5 Q 6 12 8.5 15.5" stroke="currentColor" strokeWidth="2" fill="none" opacity="0.7"/>
           <path d="M 15.5 8.5 Q 18 12 15.5 15.5" stroke="currentColor" strokeWidth="2" fill="none" opacity="0.7"/>
