@@ -1,0 +1,28 @@
+#!/bin/bash
+# Build script for macOS/Linux
+
+echo "Building Morse Chat..."
+
+# Create virtual environment if it doesn't exist
+if [ ! -d "venv" ]; then
+    echo "Creating virtual environment..."
+    python3 -m venv venv
+fi
+
+# Activate virtual environment
+source venv/bin/activate
+
+# Install dependencies
+echo "Installing dependencies..."
+pip install -r requirements.txt
+pip install pyinstaller
+
+# Build executable
+echo "Building executable..."
+pyinstaller --name="Morse Chat" \
+    --windowed \
+    --onefile \
+    --icon=assets/icon.icns \
+    morse_chat/main.py
+
+echo "Build complete! Executable in dist/"
