@@ -106,6 +106,10 @@ class MorseChatWindow(QMainWindow):
         self.message_audio = {}  # message_id -> audio bytes
         self.next_message_id = 0
         
+        # Audio device selection
+        self.selected_input_device = None
+        self.selected_output_device = None
+        
         self.init_ui()
     
     def init_ui(self):
@@ -204,12 +208,22 @@ class MorseChatWindow(QMainWindow):
             }
         """)
         
+        # Tick labels
+        tick_layout = QHBoxLayout()
+        tick_layout.setContentsMargins(0, 0, 0, 0)
+        for wpm in [10, 20, 30, 40]:
+            label = QLabel(str(wpm))
+            label.setAlignment(Qt.AlignCenter)
+            label.setStyleSheet("color: #ff8800; font-family: 'Courier New'; font-size: 11pt;")
+            tick_layout.addWidget(label)
+        
         # Value label
         self.wpm_value_label = QLabel("20 WPM")
         self.wpm_value_label.setAlignment(Qt.AlignCenter)
         self.wpm_value_label.setStyleSheet("color: #ff8800; font-family: 'Courier New'; font-size: 14pt; font-weight: bold;")
         
         wpm_layout.addWidget(self.wpm_slider)
+        wpm_layout.addLayout(tick_layout)
         wpm_layout.addWidget(self.wpm_value_label)
         wpm_layout.addSpacing(10)
         wpm_group.setLayout(wpm_layout)
@@ -240,7 +254,8 @@ class MorseChatWindow(QMainWindow):
         input_label = QLabel("Input:")
         input_label.setStyleSheet("color: #ff8800; font-family: 'Courier New'; font-size: 14pt;")
         self.input_combo = QComboBox()
-        self.input_combo.addItem("Default Microphone")
+        self._populate_audio_devices(self.input_combo, input_devices=True)
+        self.input_combo.currentIndexChanged.connect(self._on_input_device_changed)
         self.input_combo.setStyleSheet("""
             QComboBox {
                 background-color: #2a2a2a;
@@ -266,7 +281,8 @@ class MorseChatWindow(QMainWindow):
         output_label = QLabel("Output:")
         output_label.setStyleSheet("color: #ff8800; font-family: 'Courier New'; font-size: 14pt;")
         self.output_combo = QComboBox()
-        self.output_combo.addItem("Default Speaker")
+        self._populate_audio_devices(self.output_combo, input_devices=False)
+        self.output_combo.currentIndexChanged.connect(self._on_output_device_changed)
         self.output_combo.setStyleSheet("""
             QComboBox {
                 background-color: #2a2a2a;
@@ -493,6 +509,49 @@ class MorseChatWindow(QMainWindow):
         
         return chat_widget
     
+    def _populate_audio_devices(self, combo_box, input_devices=True):
+        """Populate combo box with available audio devices."""
+        if not PYAUDIO_AVAILABLE:
+            combo_box.addItem("PyAudio not installed")
+            return
+        
+        try:
+            p = pyaudio.PyAudio()
+            device_count = p.get_device_count()
+            
+            for i in range(device_count):
+                info = p.get_device_info_by_index(i)
+                # Check if device is input or output
+                if input_devices and info['maxInputChannels'] > 0:
+                    combo_box.addItem(info['name'], userData=i)
+                elif not input_devices and info['maxOutputChannels'] > 0:
+                    combo_box.addItem(info['name'], userData=i)
+            
+            p.terminate()
+            
+            # Set default device
+            if combo_box.count() == 0:
+                combo_box.addItem("No devices found")
+            else:
+                # Try to select default device
+                combo_box.setCurrentIndex(0)
+        except Exception as e:
+            combo_box.addItem(f"Error: {str(e)}")
+    
+    def _on_input_device_changed(self, index):
+        """Handle input device selection change."""
+        device_id = self.input_combo.itemData(index)
+        if device_id is not None:
+            self.selected_input_device = device_id
+            self.statusBar().showMessage(f"Input device: {self.input_combo.currentText()}")
+    
+    def _on_output_device_changed(self, index):
+        """Handle output device selection change."""
+        device_id = self.output_combo.itemData(index)
+        if device_id is not None:
+            self.selected_output_device = device_id
+            self.statusBar().showMessage(f"Output device: {self.output_combo.currentText()}")
+    
     def update_wpm(self, wpm):
         """Update WPM setting."""
         self.wpm = wpm
@@ -625,12 +684,13 @@ class MorseChatWindow(QMainWindow):
             with wave.open(io.BytesIO(audio_bytes), 'rb') as wf:
                 p = pyaudio.PyAudio()
                 
-                # Open stream
+                # Open stream with selected output device
                 stream = p.open(
                     format=p.get_format_from_width(wf.getsampwidth()),
                     channels=wf.getnchannels(),
                     rate=wf.getframerate(),
-                    output=True
+                    output=True,
+                    output_device_index=self.selected_output_device  # Use selected device
                 )
                 
                 # Play audio
