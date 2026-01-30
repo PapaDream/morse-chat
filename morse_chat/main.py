@@ -70,6 +70,7 @@ class MorseChatWindow(QMainWindow):
     def init_ui(self):
         """Initialize the user interface."""
         central_widget = QWidget()
+        central_widget.setStyleSheet("background-color: #2a2a2a;")
         self.setCentralWidget(central_widget)
         
         main_layout = QHBoxLayout()
@@ -84,6 +85,14 @@ class MorseChatWindow(QMainWindow):
         main_layout.addWidget(chat_area, stretch=1)
         
         # Status bar
+        self.statusBar().setStyleSheet("""
+            QStatusBar {
+                background-color: #1a1a1a;
+                color: #ff8800;
+                border-top: 2px solid #000;
+                font-family: 'Courier New';
+            }
+        """)
         self.statusBar().showMessage("Ready")
     
     def create_sidebar(self):
@@ -93,8 +102,8 @@ class MorseChatWindow(QMainWindow):
         sidebar.setFixedWidth(250)
         sidebar.setStyleSheet("""
             QFrame {
-                background-color: #f5f5f5;
-                border-right: 1px solid #ddd;
+                background-color: #1a1a1a;
+                border-right: 2px solid #000;
             }
         """)
         
@@ -103,20 +112,51 @@ class MorseChatWindow(QMainWindow):
         
         # Title
         title = QLabel("Settings")
-        title.setFont(QFont("Arial", 16, QFont.Bold))
-        title.setStyleSheet("color: #333; padding: 10px;")
+        title.setFont(QFont("Courier New", 16, QFont.Bold))
+        title.setStyleSheet("color: #ff8800; padding: 10px; text-shadow: 0 0 10px #ff8800;")
         layout.addWidget(title)
         
         # WPM control
         wpm_group = QGroupBox("Speed")
+        wpm_group.setStyleSheet("""
+            QGroupBox {
+                color: #ff8800;
+                font-family: 'Courier New';
+                font-weight: bold;
+                border: 1px solid #000;
+                border-radius: 5px;
+                margin-top: 10px;
+                padding-top: 10px;
+            }
+            QGroupBox::title {
+                subcontrol-origin: margin;
+                left: 10px;
+                padding: 0 5px;
+            }
+        """)
         wpm_layout = QVBoxLayout()
         
         wpm_label = QLabel("WPM:")
+        wpm_label.setStyleSheet("color: #ff8800; font-family: 'Courier New';")
         self.wpm_spin = QSpinBox()
         self.wpm_spin.setRange(5, 40)
         self.wpm_spin.setValue(20)
         self.wpm_spin.valueChanged.connect(self.update_wpm)
-        self.wpm_spin.setStyleSheet("padding: 5px; font-size: 14px;")
+        self.wpm_spin.setStyleSheet("""
+            QSpinBox {
+                background-color: #2a2a2a;
+                color: #ff8800;
+                border: 1px solid #000;
+                border-radius: 3px;
+                padding: 5px;
+                font-size: 14px;
+                font-family: 'Courier New';
+            }
+            QSpinBox::up-button, QSpinBox::down-button {
+                background-color: #1a1a1a;
+                border: 1px solid #000;
+            }
+        """)
         
         wpm_layout.addWidget(wpm_label)
         wpm_layout.addWidget(self.wpm_spin)
@@ -125,17 +165,71 @@ class MorseChatWindow(QMainWindow):
         
         # Audio devices
         audio_group = QGroupBox("Audio")
+        audio_group.setStyleSheet("""
+            QGroupBox {
+                color: #ff8800;
+                font-family: 'Courier New';
+                font-weight: bold;
+                border: 1px solid #000;
+                border-radius: 5px;
+                margin-top: 10px;
+                padding-top: 10px;
+            }
+            QGroupBox::title {
+                subcontrol-origin: margin;
+                left: 10px;
+                padding: 0 5px;
+            }
+        """)
         audio_layout = QVBoxLayout()
         
         input_label = QLabel("Input:")
+        input_label.setStyleSheet("color: #ff8800; font-family: 'Courier New';")
         self.input_combo = QComboBox()
         self.input_combo.addItem("Default Microphone")
-        self.input_combo.setStyleSheet("padding: 5px;")
+        self.input_combo.setStyleSheet("""
+            QComboBox {
+                background-color: #2a2a2a;
+                color: #ff8800;
+                border: 1px solid #000;
+                border-radius: 3px;
+                padding: 5px;
+                font-family: 'Courier New';
+            }
+            QComboBox::drop-down {
+                border: 1px solid #000;
+            }
+            QComboBox QAbstractItemView {
+                background-color: #2a2a2a;
+                color: #ff8800;
+                selection-background-color: #ff8800;
+                selection-color: #000;
+            }
+        """)
         
         output_label = QLabel("Output:")
+        output_label.setStyleSheet("color: #ff8800; font-family: 'Courier New';")
         self.output_combo = QComboBox()
         self.output_combo.addItem("Default Speaker")
-        self.output_combo.setStyleSheet("padding: 5px;")
+        self.output_combo.setStyleSheet("""
+            QComboBox {
+                background-color: #2a2a2a;
+                color: #ff8800;
+                border: 1px solid #000;
+                border-radius: 3px;
+                padding: 5px;
+                font-family: 'Courier New';
+            }
+            QComboBox::drop-down {
+                border: 1px solid #000;
+            }
+            QComboBox QAbstractItemView {
+                background-color: #2a2a2a;
+                color: #ff8800;
+                selection-background-color: #ff8800;
+                selection-color: #000;
+            }
+        """)
         
         audio_layout.addWidget(input_label)
         audio_layout.addWidget(self.input_combo)
@@ -146,16 +240,74 @@ class MorseChatWindow(QMainWindow):
         
         # Options
         options_group = QGroupBox("Options")
+        options_group.setStyleSheet("""
+            QGroupBox {
+                color: #ff8800;
+                font-family: 'Courier New';
+                font-weight: bold;
+                border: 1px solid #000;
+                border-radius: 5px;
+                margin-top: 10px;
+                padding-top: 10px;
+            }
+            QGroupBox::title {
+                subcontrol-origin: margin;
+                left: 10px;
+                padding: 0 5px;
+            }
+        """)
         options_layout = QVBoxLayout()
         
         # Abbreviate toggle
         self.abbrev_toggle = ToggleSwitch("Abbreviate")
+        self.abbrev_toggle.setStyleSheet("""
+            QCheckBox {
+                color: #ff8800;
+                font-family: 'Courier New';
+                spacing: 10px;
+            }
+            QCheckBox::indicator {
+                width: 40px;
+                height: 20px;
+            }
+            QCheckBox::indicator:unchecked {
+                background-color: #2a2a2a;
+                border: 1px solid #000;
+                border-radius: 10px;
+            }
+            QCheckBox::indicator:checked {
+                background-color: #ff8800;
+                border: 1px solid #000;
+                border-radius: 10px;
+            }
+        """)
         self.abbrev_toggle.setChecked(False)
         self.abbrev_toggle.stateChanged.connect(self.toggle_abbreviate)
         options_layout.addWidget(self.abbrev_toggle)
         
         # Audio playback toggle
         self.audio_toggle = ToggleSwitch("Audio Playback")
+        self.audio_toggle.setStyleSheet("""
+            QCheckBox {
+                color: #ff8800;
+                font-family: 'Courier New';
+                spacing: 10px;
+            }
+            QCheckBox::indicator {
+                width: 40px;
+                height: 20px;
+            }
+            QCheckBox::indicator:unchecked {
+                background-color: #2a2a2a;
+                border: 1px solid #000;
+                border-radius: 10px;
+            }
+            QCheckBox::indicator:checked {
+                background-color: #ff8800;
+                border: 1px solid #000;
+                border-radius: 10px;
+            }
+        """)
         self.audio_toggle.setChecked(False)
         self.audio_toggle.stateChanged.connect(self.toggle_audio)
         options_layout.addWidget(self.audio_toggle)
@@ -176,13 +328,15 @@ class MorseChatWindow(QMainWindow):
         # Chat display
         self.chat_display = QTextEdit()
         self.chat_display.setReadOnly(True)
-        self.chat_display.setFont(QFont("Courier New", 11))
+        self.chat_display.setFont(QFont("Courier New", 12))
         self.chat_display.setStyleSheet("""
             QTextEdit {
-                background-color: #ffffff;
-                border: 1px solid #ddd;
+                background-color: #3a3a3a;
+                color: #ff8800;
+                border: 2px solid #000;
                 border-radius: 5px;
-                padding: 10px;
+                padding: 15px;
+                font-family: 'Courier New';
             }
         """)
         self.chat_display.anchorClicked.connect(self.play_message_audio)
@@ -195,8 +349,8 @@ class MorseChatWindow(QMainWindow):
         input_container.setLayout(input_layout)
         input_container.setStyleSheet("""
             QWidget {
-                background-color: #f9f9f9;
-                border-top: 1px solid #ddd;
+                background-color: #2a2a2a;
+                border-top: 2px solid #000;
                 padding: 10px;
             }
         """)
@@ -208,10 +362,16 @@ class MorseChatWindow(QMainWindow):
         self.text_input.returnPressed.connect(self.send_message)
         self.text_input.setStyleSheet("""
             QLineEdit {
-                padding: 10px;
-                font-size: 14px;
-                border: 1px solid #ddd;
+                background-color: #1a1a1a;
+                color: #ff8800;
+                border: 2px solid #000;
                 border-radius: 5px;
+                padding: 12px;
+                font-size: 14px;
+                font-family: 'Courier New';
+            }
+            QLineEdit::placeholder {
+                color: #665533;
             }
         """)
         
@@ -219,19 +379,21 @@ class MorseChatWindow(QMainWindow):
         send_button.clicked.connect(self.send_message)
         send_button.setStyleSheet("""
             QPushButton {
-                background-color: #4CAF50;
-                color: white;
-                padding: 10px 20px;
+                background-color: #ff8800;
+                color: #000;
+                padding: 12px 25px;
                 font-size: 14px;
                 font-weight: bold;
-                border: none;
+                font-family: 'Courier New';
+                border: 2px solid #000;
                 border-radius: 5px;
             }
             QPushButton:hover {
-                background-color: #45a049;
+                background-color: #ff9920;
+                box-shadow: 0 0 15px #ff8800;
             }
             QPushButton:pressed {
-                background-color: #3d8b40;
+                background-color: #dd7700;
             }
         """)
         
@@ -241,7 +403,7 @@ class MorseChatWindow(QMainWindow):
         # Morse preview
         self.morse_preview = QLabel("")
         self.morse_preview.setFont(QFont("Courier New", 10))
-        self.morse_preview.setStyleSheet("color: #666; padding: 5px;")
+        self.morse_preview.setStyleSheet("color: #ff8800; padding: 5px; font-family: 'Courier New';")
         self.text_input.textChanged.connect(self.update_morse_preview)
         
         input_layout.addLayout(text_input_layout)
@@ -322,15 +484,16 @@ class MorseChatWindow(QMainWindow):
         
         # Create clickable message if audio is available
         if message_id is not None and self.audio_playback:
-            html = f'<div style="margin: 5px 0;">'
-            html += f'<span style="color: #666; font-size: 10px;">{timestamp}</span> '
-            html += f'<b style="color: {color};">{sender}:</b> '
-            html += f'<a href="#{message_id}" style="color: {color}; text-decoration: none;">{text}</a>'
+            html = f'<div style="margin: 5px 0; font-family: Courier New;">'
+            html += f'<span style="color: #996633; font-size: 10px;">{timestamp}</span> '
+            html += f'<b style="color: #ff8800; text-shadow: 0 0 8px #ff8800;">{sender}:</b> '
+            html += f'<a href="#{message_id}" style="color: #ff8800; text-decoration: none; text-shadow: 0 0 5px #ff8800;">{text}</a>'
             html += '</div>'
         else:
-            html = f'<div style="margin: 5px 0;">'
-            html += f'<span style="color: #666; font-size: 10px;">{timestamp}</span> '
-            html += f'<b style="color: {color};">{sender}:</b> {text}'
+            html = f'<div style="margin: 5px 0; font-family: Courier New;">'
+            html += f'<span style="color: #996633; font-size: 10px;">{timestamp}</span> '
+            html += f'<b style="color: #ff8800; text-shadow: 0 0 8px #ff8800;">{sender}:</b> '
+            html += f'<span style="color: #ff8800; text-shadow: 0 0 5px #ff8800;">{text}</span>'
             html += '</div>'
         
         cursor.insertHtml(html)
@@ -339,12 +502,13 @@ class MorseChatWindow(QMainWindow):
         self.chat_display.setTextCursor(cursor)
         self.chat_display.ensureCursorVisible()
     
-    def append_text(self, text, color="#000"):
+    def append_text(self, text, color="#ff8800"):
         """Append plain text (for Morse/abbreviations)."""
         cursor = self.chat_display.textCursor()
         cursor.movePosition(QTextCursor.End)
         
-        html = f'<div style="margin: 2px 0; color: {color}; font-size: 11px;">{text}</div>'
+        # Dimmer orange for secondary text
+        html = f'<div style="margin: 2px 0; color: #cc6600; font-size: 11px; font-family: Courier New;">{text}</div>'
         cursor.insertHtml(html)
         
         # Auto-scroll to bottom
