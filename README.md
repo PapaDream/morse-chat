@@ -6,12 +6,22 @@ Perfect for ham radio operators studying for their license or communicating via 
 
 ## Features
 
+### Current (v0.1.0)
 - 🎧 **Audio Input**: Decode Morse code audio to text in real-time
 - 📡 **Audio Output**: Type text and transmit as Morse code audio
 - 💬 **Chat Interface**: Simple, clean conversation view
 - ⚡ **Adjustable Speed**: Support for 5-40 WPM
 - 🎨 **Visual Feedback**: See dit-dah patterns as they're decoded
 - 🔊 **Configurable Audio**: Choose input/output devices
+
+### Coming Soon
+- 📻 **DMR/Digital Radio Integration**: Interface with digital mode software
+- 🎙️ **Voice-to-CW**: Speak into mic, auto-convert to Morse
+- 📊 **80m Band Presets**: Quick access to CW frequencies (3.500-3.600 MHz)
+- 🔌 **PTT Control**: Serial/CAT control for transmitter keying
+- 📝 **QSO Logging**: Track contacts and export to ADIF
+
+See [FEATURES.md](FEATURES.md) for full roadmap.
 
 ## Download
 
