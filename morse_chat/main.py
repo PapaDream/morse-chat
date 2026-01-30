@@ -157,7 +157,7 @@ class MorseChatWindow(QMainWindow):
                 font-family: 'Courier New';
                 font-weight: bold;
                 border: 1px solid #000;
-                border-radius: 5px;
+                border-radius: 3px;
                 margin-top: 10px;
                 padding-top: 10px;
             }
@@ -206,7 +206,7 @@ class MorseChatWindow(QMainWindow):
                 font-family: 'Courier New';
                 font-weight: bold;
                 border: 1px solid #000;
-                border-radius: 5px;
+                border-radius: 3px;
                 margin-top: 10px;
                 padding-top: 10px;
             }
@@ -287,7 +287,7 @@ class MorseChatWindow(QMainWindow):
                 font-family: 'Courier New';
                 font-weight: bold;
                 border: 1px solid #000;
-                border-radius: 5px;
+                border-radius: 3px;
                 margin-top: 10px;
                 padding-top: 10px;
             }
@@ -315,12 +315,12 @@ class MorseChatWindow(QMainWindow):
             QCheckBox::indicator:unchecked {
                 background-color: #2a2a2a;
                 border: 1px solid #000;
-                border-radius: 10px;
+                border-radius: 5px;
             }
             QCheckBox::indicator:checked {
                 background-color: #ff8800;
                 border: 1px solid #000;
-                border-radius: 10px;
+                border-radius: 5px;
             }
         """)
         self.abbrev_toggle.setChecked(False)
@@ -344,12 +344,12 @@ class MorseChatWindow(QMainWindow):
             QCheckBox::indicator:unchecked {
                 background-color: #2a2a2a;
                 border: 1px solid #000;
-                border-radius: 10px;
+                border-radius: 5px;
             }
             QCheckBox::indicator:checked {
                 background-color: #ff8800;
                 border: 1px solid #000;
-                border-radius: 10px;
+                border-radius: 5px;
             }
         """)
         self.audio_toggle.setChecked(False)
@@ -379,7 +379,7 @@ class MorseChatWindow(QMainWindow):
                 background-color: #3a3a3a;
                 color: #ff8800;
                 border: 2px solid #000;
-                border-radius: 5px;
+                border-radius: 3px;
                 padding: 15px;
                 font-family: 'Courier New';
                 font-size: 11pt;
@@ -402,7 +402,10 @@ class MorseChatWindow(QMainWindow):
         input_container.setStyleSheet("""
             QWidget {
                 background-color: #2a2a2a;
+                border: 2px solid #000;
                 border-top: 2px solid #000;
+                border-bottom-left-radius: 3px;
+                border-bottom-right-radius: 3px;
                 padding: 8px;
             }
         """)
@@ -417,7 +420,7 @@ class MorseChatWindow(QMainWindow):
                 background-color: #1a1a1a;
                 color: #ff8800;
                 border: 2px solid #000;
-                border-radius: 5px;
+                border-radius: 3px;
                 padding: 15px;
                 font-size: 16px;
                 font-family: 'Courier New';
@@ -439,7 +442,7 @@ class MorseChatWindow(QMainWindow):
                 font-weight: bold;
                 font-family: 'Courier New';
                 border: 2px solid #000;
-                border-radius: 5px;
+                border-radius: 3px;
             }
             QPushButton:hover {
                 background-color: #ff9920;
