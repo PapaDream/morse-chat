@@ -6,7 +6,7 @@ Thanks for your interest in contributing! Here's how to get started.
 
 1. **Fork the repository**
    ```bash
-   git clone https://github.com/YOUR_USERNAME/morse-chat.git
+   git clone https://github.com/PapaDream/morse-chat.git
    cd morse-chat
    ```
 
@@ -85,6 +85,6 @@ When reporting bugs, please include:
 
 ## Questions?
 
-Open a [GitHub Discussion](https://github.com/YOUR_USERNAME/morse-chat/discussions)
+Open a [GitHub Discussion](https://github.com/PapaDream/morse-chat/discussions)
 
 73!

@@ -26,10 +26,10 @@ See [FEATURES.md](FEATURES.md) for full roadmap.
 ## Download
 
 ### macOS
-Download the latest `.dmg` from [Releases](https://github.com/YOUR_USERNAME/morse-chat/releases)
+Download the latest `.dmg` from [Releases](https://github.com/PapaDream/morse-chat/releases)
 
 ### Windows
-Download the latest `.exe` installer from [Releases](https://github.com/YOUR_USERNAME/morse-chat/releases)
+Download the latest `.exe` installer from [Releases](https://github.com/PapaDream/morse-chat/releases)
 
 ### Linux
 ```bash
@@ -54,7 +54,7 @@ morse-chat
 
 ### Installation
 ```bash
-git clone https://github.com/YOUR_USERNAME/morse-chat.git
+git clone https://github.com/PapaDream/morse-chat.git
 cd morse-chat
 pip install -r requirements.txt
 python morse_chat/main.py
@@ -91,5 +91,5 @@ Built for the amateur radio community. 73!
 
 ## Support
 
-- Issues: [GitHub Issues](https://github.com/YOUR_USERNAME/morse-chat/issues)
-- Discussions: [GitHub Discussions](https://github.com/YOUR_USERNAME/morse-chat/discussions)
+- Issues: [GitHub Issues](https://github.com/PapaDream/morse-chat/issues)
+- Discussions: [GitHub Discussions](https://github.com/PapaDream/morse-chat/discussions)
