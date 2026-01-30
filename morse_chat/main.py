@@ -13,7 +13,6 @@ from PyQt5.QtWidgets import (
 )
 from PyQt5.QtCore import Qt, QTimer, pyqtSignal
 from PyQt5.QtGui import QFont, QTextCursor, QTextCharFormat, QColor, QTextOption
-from PyQt5.QtMultimedia import QSound
 
 from morse import text_to_morse, morse_to_text, MorseEncoder, MorseDecoder
 from abbreviations import expand_abbreviations
