@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  margin: 0;
+  font-family: 'Courier New', monospace;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #2a2a2a;
+  color: #ff8800;
+}
+
+/* Custom slider styling */
+input[type="range"].slider-orange::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #ff8800;
+  border: 2px solid #000;
+  cursor: pointer;
+}
+
+input[type="range"].slider-orange::-webkit-slider-thumb:hover {
+  background: #ff9920;
+}
+
+input[type="range"].slider-orange::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #ff8800;
+  border: 2px solid #000;
+  cursor: pointer;
+}
+
+input[type="range"].slider-orange::-moz-range-thumb:hover {
+  background: #ff9920;
+}
