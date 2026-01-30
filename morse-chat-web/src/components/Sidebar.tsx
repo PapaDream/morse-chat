@@ -30,24 +30,24 @@ export function Sidebar({
   onCallSignChange,
 }: SidebarProps) {
   return (
-    <div className="w-full md:w-64 bg-black border-r border-gray-900 flex flex-col p-3 md:p-4 font-mono">
-      <div className="mb-6 flex items-center gap-2">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" className="text-terminal-orange flex-shrink-0">
+    <div className="w-full md:w-64 bg-black border-r border-gray-900 flex flex-col p-2 md:p-4 font-mono overflow-hidden">
+      <div className="mb-2 md:mb-6 flex items-center gap-2">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="md:w-7 md:h-7 text-terminal-orange flex-shrink-0">
           <circle cx="12" cy="12" r="2" fill="currentColor"/>
           <path d="M 8.5 8.5 Q 6 12 8.5 15.5" stroke="currentColor" strokeWidth="2" fill="none" opacity="0.7"/>
           <path d="M 15.5 8.5 Q 18 12 15.5 15.5" stroke="currentColor" strokeWidth="2" fill="none" opacity="0.7"/>
           <path d="M 5.5 5.5 Q 2 12 5.5 18.5" stroke="currentColor" strokeWidth="2" fill="none" opacity="0.4"/>
           <path d="M 18.5 5.5 Q 22 12 18.5 18.5" stroke="currentColor" strokeWidth="2" fill="none" opacity="0.4"/>
         </svg>
-        <h1 className="text-lg font-bold text-terminal-orange tracking-wider" style={{ textShadow: '0 0 15px rgba(255, 136, 0, 0.4)' }}>MORSE CHAT</h1>
+        <h1 className="text-sm md:text-lg font-bold text-terminal-orange tracking-wider" style={{ textShadow: '0 0 15px rgba(255, 136, 0, 0.4)' }}>MORSE CHAT</h1>
       </div>
       
       {/* Speed Section */}
-      <div className="mb-4 md:mb-8">
-        <h2 className="text-xs font-bold text-terminal-orange mb-2 uppercase tracking-wider">Speed (WPM)</h2>
-        <div className="flex justify-between items-center text-xs text-gray-600 mb-1">
+      <div className="mb-2 md:mb-8">
+        <h2 className="text-xs font-bold text-terminal-orange mb-1 uppercase tracking-wider">Speed (WPM)</h2>
+        <div className="flex justify-between items-center text-xs text-gray-600 mb-0.5">
           <span>10</span>
-          <span className="text-sm font-bold text-terminal-orange" style={{ textShadow: '0 0 15px rgba(255, 136, 0, 0.4)' }}>
+          <span className="text-xs md:text-sm font-bold text-terminal-orange" style={{ textShadow: '0 0 15px rgba(255, 136, 0, 0.4)' }}>
             {wpm}
           </span>
           <span>40</span>
@@ -64,33 +64,33 @@ export function Sidebar({
       </div>
 
       {/* Audio Section */}
-      <div className="mb-4 md:mb-8">
-        <h2 className="text-xs font-bold text-terminal-orange mb-2 uppercase tracking-wider">Audio Input</h2>
+      <div className="mb-2 md:mb-8">
+        <h2 className="text-xs font-bold text-terminal-orange mb-1 uppercase tracking-wider">Audio Input</h2>
         <select
           value={inputDevice}
           onChange={(e) => onInputDeviceChange(e.target.value)}
-          className="w-full bg-gray-800 text-terminal-orange border border-gray-700 rounded px-3 py-2 text-sm"
+          className="w-full bg-gray-800 text-terminal-orange border border-gray-700 rounded px-2 py-1 md:px-3 md:py-2 text-xs md:text-sm"
         >
           <option value="default">Default Microphone</option>
         </select>
       </div>
 
       {/* Audio Output Section */}
-      <div className="mb-4 md:mb-8">
-        <h2 className="text-xs font-bold text-terminal-orange mb-2 uppercase tracking-wider">Audio Output</h2>
+      <div className="mb-2 md:mb-8">
+        <h2 className="text-xs font-bold text-terminal-orange mb-1 uppercase tracking-wider">Audio Output</h2>
         <select
           value={outputDevice}
           onChange={(e) => onOutputDeviceChange(e.target.value)}
-          className="w-full bg-gray-800 text-terminal-orange border border-gray-700 rounded px-3 py-2 text-sm"
+          className="w-full bg-gray-800 text-terminal-orange border border-gray-700 rounded px-2 py-1 md:px-3 md:py-2 text-xs md:text-sm"
         >
           <option value="default">Default Speakers</option>
         </select>
       </div>
 
       {/* Options Section */}
-      <div className="mb-4 md:mb-8 mt-2">
-        <label className="flex items-center justify-between mb-4 cursor-pointer">
-          <span className="text-sm text-terminal-orange">Auto-Scroll</span>
+      <div className="mb-2 md:mb-8 mt-1 md:mt-2">
+        <label className="flex items-center justify-between mb-2 md:mb-4 cursor-pointer">
+          <span className="text-xs md:text-sm text-terminal-orange">Auto-Scroll</span>
           <div className="relative">
             <input
               type="checkbox"
@@ -98,12 +98,12 @@ export function Sidebar({
               onChange={(e) => onAutoScrollChange(e.target.checked)}
               className="sr-only peer"
             />
-            <div className="w-11 h-6 bg-gray-800 rounded-full border border-gray-700 peer-checked:bg-terminal-orange transition-colors"></div>
+            <div className="w-9 h-5 md:w-11 md:h-6 bg-gray-800 rounded-full border border-gray-700 peer-checked:bg-terminal-orange transition-colors"></div>
           </div>
         </label>
 
         <label className="flex items-center justify-between cursor-pointer">
-          <span className="text-sm text-terminal-orange">Sound</span>
+          <span className="text-xs md:text-sm text-terminal-orange">Sound</span>
           <div className="relative">
             <input
               type="checkbox"
@@ -111,23 +111,23 @@ export function Sidebar({
               onChange={(e) => onSoundEnabledChange(e.target.checked)}
               className="sr-only peer"
             />
-            <div className="w-11 h-6 bg-gray-800 rounded-full border border-gray-700 peer-checked:bg-terminal-orange transition-colors"></div>
+            <div className="w-9 h-5 md:w-11 md:h-6 bg-gray-800 rounded-full border border-gray-700 peer-checked:bg-terminal-orange transition-colors"></div>
           </div>
         </label>
       </div>
 
       {/* Callsign at bottom */}
-      <div className="mt-auto pt-4 border-t border-gray-800">
-        <div className="text-xs font-bold text-terminal-orange mb-2 uppercase tracking-wider">Call Sign</div>
+      <div className="mt-auto pt-2 md:pt-4 border-t border-gray-800">
+        <div className="text-xs font-bold text-terminal-orange mb-1 uppercase tracking-wider">Call Sign</div>
         <input
           type="text"
           value={callSign}
           onChange={(e) => onCallSignChange(e.target.value.toUpperCase())}
           placeholder="K1ABC"
-          className="w-full bg-gray-800 text-terminal-orange border border-gray-700 rounded px-3 py-2 text-lg font-bold mb-2 focus:outline-none focus:border-terminal-orange text-center"
+          className="w-full bg-gray-800 text-terminal-orange border border-gray-700 rounded px-2 py-1 md:px-3 md:py-2 text-sm md:text-lg font-bold mb-1 focus:outline-none focus:border-terminal-orange text-center"
         />
-        <div className="text-xs text-gray-500 mb-1 text-center">73 DE {callSign}</div>
-        <div className="text-sm text-gray-600 font-mono text-center">
+        <div className="text-xs text-gray-500 mb-0.5 text-center">73 DE {callSign}</div>
+        <div className="text-xs md:text-sm text-gray-600 font-mono text-center">
           {textToMorse(callSign)}
         </div>
       </div>
