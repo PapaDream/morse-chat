@@ -122,7 +122,7 @@ export function Sidebar({
           value={callSign}
           onChange={(e) => onCallSignChange(e.target.value.toUpperCase())}
           placeholder="K1ABC"
-          className="w-full bg-gray-800 text-terminal-orange border border-gray-700 rounded px-3 py-2 text-sm font-bold mb-2 focus:outline-none focus:border-terminal-orange"
+          className="w-full bg-gray-800 text-terminal-orange border border-gray-700 rounded px-3 py-2 text-base font-bold mb-2 focus:outline-none focus:border-terminal-orange text-center"
         />
         <div className="text-xs text-gray-500 mb-1">73 DE {callSign}</div>
         <div className="text-xs text-gray-600 font-mono">
