@@ -46,7 +46,7 @@ export function Sidebar({
           onChange={(e) => onWpmChange(Number(e.target.value))}
           className="w-full h-2 bg-gray-800 rounded appearance-none cursor-pointer slider-orange"
         />
-        <div className="text-center text-5xl font-bold text-terminal-orange mt-4">
+        <div className="text-center text-3xl font-bold text-terminal-orange mt-3">
           {wpm}
         </div>
       </div>

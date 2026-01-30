@@ -19,31 +19,27 @@ input[type="range"].slider-orange {
 input[type="range"].slider-orange::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   background: #ff8800;
-  border: 3px solid #000;
+  border: 2px solid #000;
   cursor: pointer;
-  box-shadow: 0 0 0 2px #ff8800;
 }
 
 input[type="range"].slider-orange::-webkit-slider-thumb:hover {
   background: #ff9920;
-  box-shadow: 0 0 0 2px #ff9920;
 }
 
 input[type="range"].slider-orange::-moz-range-thumb {
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   background: #ff8800;
-  border: 3px solid #000;
+  border: 2px solid #000;
   cursor: pointer;
-  box-shadow: 0 0 0 2px #ff8800;
 }
 
 input[type="range"].slider-orange::-moz-range-thumb:hover {
   background: #ff9920;
-  box-shadow: 0 0 0 2px #ff9920;
 }
