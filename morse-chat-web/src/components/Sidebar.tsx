@@ -26,7 +26,11 @@ export function Sidebar({
   return (
     <div className="w-64 bg-black border-r border-gray-900 flex flex-col p-4 font-mono">
       <div className="mb-6 flex items-center gap-2">
-        <span className="text-terminal-orange text-xl">📻</span>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="text-terminal-orange">
+          <circle cx="12" cy="12" r="2" fill="currentColor"/>
+          <circle cx="12" cy="12" r="5" stroke="currentColor" strokeWidth="2" opacity="0.6"/>
+          <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2" opacity="0.3"/>
+        </svg>
         <h1 className="text-lg font-bold text-terminal-orange tracking-wider">MORSE CHAT</h1>
       </div>
       
