@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Message } from '../types/Message';
+import type { Message } from '../App';
 import { textToMorse } from '../utils/morse';
 
 interface ChatAreaProps {

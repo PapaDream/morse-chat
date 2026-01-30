@@ -1,7 +1,14 @@
 import { useState } from "react";
 import { Sidebar } from "./components/Sidebar";
 import { ChatArea } from "./components/ChatArea";
-import { Message } from "./types/Message";
+
+export interface Message {
+  id: string;
+  message: string;
+  morse: string;
+  timestamp: Date;
+  isOwn: boolean;
+}
 
 function App() {
   // Sidebar state
