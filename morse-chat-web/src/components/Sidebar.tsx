@@ -54,7 +54,7 @@ export function Sidebar({
           type="range"
           min="10"
           max="40"
-          step="1"
+          step="10"
           value={wpm}
           onChange={(e) => onWpmChange(Number(e.target.value))}
           className="w-full h-2 bg-gray-800 rounded appearance-none cursor-pointer slider-orange"
