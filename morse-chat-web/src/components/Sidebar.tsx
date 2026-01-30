@@ -43,11 +43,11 @@ export function Sidebar({
       {/* Speed Section */}
       <div className="mb-6">
         <h2 className="text-xs font-bold text-terminal-orange mb-2 uppercase tracking-wider">Speed (WPM)</h2>
-        <div className="text-center text-lg font-bold text-terminal-orange mb-2" style={{ textShadow: '0 0 15px rgba(255, 136, 0, 0.4)' }}>
-          {wpm}
-        </div>
-        <div className="flex justify-between text-xs text-gray-600 mb-1">
+        <div className="flex justify-between items-center text-xs text-gray-600 mb-1">
           <span>10</span>
+          <span className="text-sm font-bold text-terminal-orange" style={{ textShadow: '0 0 15px rgba(255, 136, 0, 0.4)' }}>
+            {wpm}
+          </span>
           <span>40</span>
         </div>
         <input
