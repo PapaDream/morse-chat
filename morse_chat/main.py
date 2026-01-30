@@ -9,7 +9,7 @@ import wave
 from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
     QTextEdit, QLineEdit, QPushButton, QLabel, QComboBox, QSpinBox,
-    QGroupBox, QCheckBox, QFrame
+    QGroupBox, QCheckBox, QFrame, QTextBrowser
 )
 from PyQt5.QtCore import Qt, QTimer, pyqtSignal
 from PyQt5.QtGui import QFont, QTextCursor, QTextCharFormat, QColor, QTextOption
@@ -43,13 +43,47 @@ class ToggleSwitch(QCheckBox):
         """)
 
 
+class ChatDisplay(QTextBrowser):
+    """Custom text display with hover effects and clickable messages."""
+    
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.parent_window = parent
+        self.setMouseTracking(True)
+        self.last_highlighted = None
+    
+    def mouseMoveEvent(self, event):
+        """Highlight message on hover."""
+        # Get the anchor (link) under the cursor
+        anchor = self.anchorAt(event.pos())
+        
+        if anchor and anchor != self.last_highlighted:
+            # New anchor - change cursor
+            self.viewport().setCursor(Qt.PointingHandCursor)
+            self.last_highlighted = anchor
+        elif not anchor and self.last_highlighted:
+            # Left anchor area
+            self.viewport().setCursor(Qt.ArrowCursor)
+            self.last_highlighted = None
+        
+        super().mouseMoveEvent(event)
+    
+    def mouseReleaseEvent(self, event):
+        """Play audio when message is clicked."""
+        anchor = self.anchorAt(event.pos())
+        if anchor and self.parent_window:
+            self.parent_window.play_message_audio_by_id(anchor)
+        super().mouseReleaseEvent(event)
+
+
 class MorseChatWindow(QMainWindow):
     """Main application window."""
     
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Morse Chat")
-        self.setFixedSize(1000, 700)  # Fixed window size
+        self.setMinimumSize(800, 600)  # Minimum size
+        self.resize(1000, 700)  # Default size, but resizable
         
         # Morse encoder/decoder
         self.wpm = 20
@@ -159,8 +193,10 @@ class MorseChatWindow(QMainWindow):
         
         wpm_layout.addWidget(wpm_label)
         wpm_layout.addWidget(self.wpm_spin)
+        wpm_layout.addSpacing(10)
         wpm_group.setLayout(wpm_layout)
         layout.addWidget(wpm_group)
+        layout.addSpacing(15)
         
         # Audio devices
         audio_group = QGroupBox("Audio")
@@ -238,8 +274,10 @@ class MorseChatWindow(QMainWindow):
         audio_layout.addWidget(self.input_combo)
         audio_layout.addWidget(output_label)
         audio_layout.addWidget(self.output_combo)
+        audio_layout.addSpacing(10)
         audio_group.setLayout(audio_layout)
         layout.addWidget(audio_group)
+        layout.addSpacing(15)
         
         # Options
         options_group = QGroupBox("Options")
@@ -288,6 +326,7 @@ class MorseChatWindow(QMainWindow):
         self.abbrev_toggle.setChecked(False)
         self.abbrev_toggle.stateChanged.connect(self.toggle_abbreviate)
         options_layout.addWidget(self.abbrev_toggle)
+        options_layout.addSpacing(10)
         
         # Audio playback toggle
         self.audio_toggle = ToggleSwitch("Audio Playback")
@@ -331,13 +370,12 @@ class MorseChatWindow(QMainWindow):
         chat_widget.setLayout(layout)
         
         # Chat display
-        self.chat_display = QTextEdit()
+        self.chat_display = ChatDisplay(self)
         self.chat_display.setReadOnly(True)
         self.chat_display.setFont(QFont("Courier New", 11))
-        self.chat_display.setLineWrapMode(QTextEdit.WidgetWidth)
-        self.chat_display.setWordWrapMode(QTextOption.WrapAtWordBoundaryOrAnywhere)
+        self.chat_display.setOpenLinks(False)
         self.chat_display.setStyleSheet("""
-            QTextEdit {
+            QTextBrowser {
                 background-color: #3a3a3a;
                 color: #ff8800;
                 border: 2px solid #000;
@@ -346,9 +384,15 @@ class MorseChatWindow(QMainWindow):
                 font-family: 'Courier New';
                 font-size: 11pt;
             }
+            QTextBrowser a {
+                color: #ff8800;
+                text-decoration: underline;
+            }
+            QTextBrowser a:hover {
+                color: #ffaa00;
+                background-color: #4a4a4a;
+            }
         """)
-        # Note: anchorClicked not available in all Qt versions
-        # Audio playback on click will be implemented differently
         layout.addWidget(self.chat_display)
         
         # Input area
@@ -359,7 +403,7 @@ class MorseChatWindow(QMainWindow):
             QWidget {
                 background-color: #2a2a2a;
                 border-top: 2px solid #000;
-                padding: 10px;
+                padding: 8px;
             }
         """)
         
@@ -374,9 +418,10 @@ class MorseChatWindow(QMainWindow):
                 color: #ff8800;
                 border: 2px solid #000;
                 border-radius: 5px;
-                padding: 12px;
-                font-size: 14px;
+                padding: 15px;
+                font-size: 16px;
                 font-family: 'Courier New';
+                font-weight: bold;
             }
             QLineEdit::placeholder {
                 color: #665533;
@@ -389,8 +434,8 @@ class MorseChatWindow(QMainWindow):
             QPushButton {
                 background-color: #ff8800;
                 color: #000;
-                padding: 12px 25px;
-                font-size: 14px;
+                padding: 18px 35px;
+                font-size: 18px;
                 font-weight: bold;
                 font-family: 'Courier New';
                 border: 2px solid #000;
@@ -403,6 +448,7 @@ class MorseChatWindow(QMainWindow):
                 background-color: #dd7700;
             }
         """)
+        send_button.setMinimumWidth(120)
         
         text_input_layout.addWidget(self.text_input)
         text_input_layout.addWidget(send_button)
@@ -495,7 +541,7 @@ class MorseChatWindow(QMainWindow):
             html = f'<div style="margin: 5px 0; font-family: Courier New; word-wrap: break-word;">'
             html += f'<span style="color: #996633; font-size: 9pt;">{timestamp}</span> '
             html += f'<b style="color: #ff8800; font-size: 11pt;">{sender}:</b> '
-            html += f'<a href="#{message_id}" style="color: #ff8800; text-decoration: none; font-size: 11pt;">{text}</a>'
+            html += f'<a href="#{message_id}" title="Click to hear Morse code" style="color: #ff8800; font-size: 11pt;">{text}</a>'
             html += '</div>'
         else:
             html = f'<div style="margin: 5px 0; font-family: Courier New; word-wrap: break-word;">'
@@ -523,19 +569,20 @@ class MorseChatWindow(QMainWindow):
         self.chat_display.setTextCursor(cursor)
         self.chat_display.ensureCursorVisible()
     
-    def play_message_audio(self, url):
+    def play_message_audio_by_id(self, anchor):
         """Play audio for a message when clicked."""
         if not self.audio_playback:
+            self.statusBar().showMessage("Enable 'Audio Playback' to hear Morse code")
             return
         
-        # Extract message ID from URL
+        # Extract message ID from anchor
         try:
-            message_id = int(url.toString().replace('#', ''))
+            message_id = int(anchor.replace('#', ''))
             if message_id in self.message_audio:
-                # TODO: Actually play the audio
+                # TODO: Actually play the audio with PyAudio
                 # For now, just show a message
-                self.statusBar().showMessage(f"Playing message {message_id} audio...")
-                # Would use PyAudio or QSound here
+                self.statusBar().showMessage(f"🔊 Playing Morse code audio...")
+                # Would use PyAudio here to play self.message_audio[message_id]
             else:
                 self.statusBar().showMessage("No audio available for this message")
         except ValueError:
