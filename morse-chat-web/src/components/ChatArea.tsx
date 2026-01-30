@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import type { Message } from '../App';
 import { textToMorse, playMorseAudio, downloadMorseAudio } from '../utils/morse';
+import { decodeAudioFile } from '../utils/morseDecoder';
 
 interface ChatAreaProps {
   messages: Message[];
@@ -13,6 +14,7 @@ interface ChatAreaProps {
 export function ChatArea({ messages, onSendMessage, autoScroll, soundEnabled = true, wpm = 20 }: ChatAreaProps) {
   const [input, setInput] = useState('');
   const [morsePreview, setMorsePreview] = useState('');
+  const [isDragging, setIsDragging] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -54,6 +56,35 @@ export function ChatArea({ messages, onSendMessage, autoScroll, soundEnabled = t
   const handleDownload = (message: string, e: React.MouseEvent) => {
     e.stopPropagation();
     downloadMorseAudio(message, wpm);
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = () => {
+    setIsDragging(false);
+  };
+
+  const handleDrop = async (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+
+    const files = Array.from(e.dataTransfer.files);
+    const audioFile = files.find(f => f.type.startsWith('audio/'));
+
+    if (audioFile) {
+      try {
+        // Decode morse code from audio
+        const decodedText = await decodeAudioFile(audioFile, wpm);
+        const morse = textToMorse(decodedText);
+        onSendMessage(decodedText, morse);
+      } catch (error) {
+        console.error('Error decoding audio:', error);
+        onSendMessage('[Error decoding audio file]', '... --- ...');
+      }
+    }
   };
 
   const formatTime = (date: Date) => {
@@ -104,7 +135,17 @@ export function ChatArea({ messages, onSendMessage, autoScroll, soundEnabled = t
       </div>
 
       {/* Input Area */}
-      <div className="bg-black border-t border-gray-900 p-4">
+      <div 
+        className={`bg-black border-t border-gray-900 p-4 relative ${isDragging ? 'bg-opacity-80' : ''}`}
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
+      >
+        {isDragging && (
+          <div className="absolute inset-0 bg-terminal-orange bg-opacity-10 border-2 border-terminal-orange border-dashed flex items-center justify-center z-10">
+            <span className="text-terminal-orange font-bold">Drop audio file to decode morse code</span>
+          </div>
+        )}
         <form onSubmit={handleSubmit} className="flex gap-3 items-center">
           <input
             type="text"
