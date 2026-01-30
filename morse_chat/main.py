@@ -7,12 +7,13 @@ import sys
 from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
     QTextEdit, QLineEdit, QPushButton, QLabel, QComboBox, QSpinBox,
-    QGroupBox
+    QGroupBox, QCheckBox
 )
 from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtGui import QFont, QTextCursor
 
 from morse import text_to_morse, morse_to_text, MorseEncoder, MorseDecoder
+from abbreviations import expand_abbreviations
 
 
 class MorseChatWindow(QMainWindow):
@@ -30,6 +31,7 @@ class MorseChatWindow(QMainWindow):
         
         # Audio state
         self.audio_enabled = False
+        self.expand_abbrev = True  # Default: show expanded abbreviations
         
         self.init_ui()
     
@@ -61,12 +63,19 @@ class MorseChatWindow(QMainWindow):
         self.output_combo = QComboBox()
         self.output_combo.addItem("Default Speaker")
         
+        # Abbreviation expansion toggle
+        self.expand_checkbox = QCheckBox("Expand CW abbreviations")
+        self.expand_checkbox.setChecked(True)
+        self.expand_checkbox.stateChanged.connect(self.toggle_expansion)
+        self.expand_checkbox.setToolTip("Show full English translation of Q-codes and abbreviations")
+        
         settings_layout.addWidget(wpm_label)
         settings_layout.addWidget(self.wpm_spin)
         settings_layout.addWidget(input_label)
         settings_layout.addWidget(self.input_combo)
         settings_layout.addWidget(output_label)
         settings_layout.addWidget(self.output_combo)
+        settings_layout.addWidget(self.expand_checkbox)
         settings_layout.addStretch()
         
         settings_group.setLayout(settings_layout)
@@ -122,6 +131,10 @@ class MorseChatWindow(QMainWindow):
         self.decoder = MorseDecoder(wpm=wpm)
         self.statusBar().showMessage(f"WPM set to {wpm}")
     
+    def toggle_expansion(self, state):
+        """Toggle abbreviation expansion."""
+        self.expand_abbrev = bool(state)
+    
     def update_morse_preview(self, text):
         """Update the Morse code preview."""
         if text:
@@ -138,6 +151,12 @@ class MorseChatWindow(QMainWindow):
         
         # Display in chat
         self.append_to_chat(f"You: {text}", "blue")
+        
+        # Show expanded abbreviations if enabled
+        if self.expand_abbrev:
+            expanded = expand_abbreviations(text, show_original=True)
+            if expanded != text.upper():
+                self.append_to_chat(f"    {expanded}", "#0066cc")
         
         # Show Morse code
         morse = text_to_morse(text)
