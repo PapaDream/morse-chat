@@ -26,10 +26,18 @@ export function morseToText(morse: string): string {
     Object.entries(MORSE_CODE).map(([k, v]) => [v, k])
   );
   
-  return morse
-    .split(' ')
-    .map(code => reverseMorse[code] || '')
-    .join('');
+  // Split by word separator first
+  const words = morse.split(' / ');
+  
+  return words.map(word => {
+    // Split each word into letters
+    return word
+      .split(' ')
+      .map(code => code.trim())
+      .filter(code => code.length > 0)
+      .map(code => reverseMorse[code] || '?')
+      .join('');
+  }).join(' ');
 }
 
 export function playMorseAudio(text: string, wpm: number = 20): void {

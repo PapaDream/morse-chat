@@ -15,8 +15,8 @@ export async function decodeAudioFile(file: File, wpm: number = 20): Promise<str
         const sampleRate = audioBuffer.sampleRate;
         
         // Detect tone presence (simple envelope detection)
-        const windowSize = Math.floor(sampleRate * 0.01); // 10ms windows
-        const threshold = 0.05;
+        const windowSize = Math.floor(sampleRate * 0.005); // 5ms windows
+        const threshold = 0.01; // Lower threshold
         
         const tones: { start: number; end: number }[] = [];
         let inTone = false;
@@ -25,53 +25,80 @@ export async function decodeAudioFile(file: File, wpm: number = 20): Promise<str
         for (let i = 0; i < channelData.length; i += windowSize) {
           // Calculate RMS for this window
           let sum = 0;
-          for (let j = i; j < Math.min(i + windowSize, channelData.length); j++) {
-            sum += channelData[j] * channelData[j];
+          const end = Math.min(i + windowSize, channelData.length);
+          for (let j = i; j < end; j++) {
+            sum += Math.abs(channelData[j]);
           }
-          const rms = Math.sqrt(sum / windowSize);
+          const avg = sum / (end - i);
           
-          if (rms > threshold && !inTone) {
+          if (avg > threshold && !inTone) {
             // Tone started
             inTone = true;
             toneStart = i / sampleRate;
-          } else if (rms <= threshold && inTone) {
+          } else if (avg <= threshold && inTone) {
             // Tone ended
             inTone = false;
-            tones.push({ start: toneStart, end: i / sampleRate });
+            const duration = (i / sampleRate) - toneStart;
+            if (duration > 0.01) { // At least 10ms
+              tones.push({ start: toneStart, end: i / sampleRate });
+            }
           }
+        }
+        
+        console.log('Detected tones:', tones.length);
+        
+        if (tones.length === 0) {
+          resolve('[No morse tones detected]');
+          return;
         }
         
         // Convert tone durations to morse
         const ditDuration = 1.2 / wpm;
         const threshold_dit_dah = ditDuration * 2;
         
-        let morse = '';
-        let lastEnd = 0;
+        let morseSymbols: string[] = [];
+        let currentLetter = '';
+        let lastEnd = tones[0].start;
         
-        for (const tone of tones) {
+        for (let i = 0; i < tones.length; i++) {
+          const tone = tones[i];
           const gap = tone.start - lastEnd;
           const duration = tone.end - tone.start;
           
-          // Add gap symbols
-          if (gap > ditDuration * 5) {
-            morse += ' / '; // Word gap
-          } else if (gap > ditDuration * 2) {
-            morse += ' '; // Letter gap
+          // Check for letter or word gap
+          if (gap > ditDuration * 5 && currentLetter) {
+            // Word gap
+            morseSymbols.push(currentLetter);
+            morseSymbols.push('/');
+            currentLetter = '';
+          } else if (gap > ditDuration * 2 && currentLetter) {
+            // Letter gap
+            morseSymbols.push(currentLetter);
+            currentLetter = '';
           }
           
           // Add dit or dah
           if (duration < threshold_dit_dah) {
-            morse += '.';
+            currentLetter += '.';
           } else {
-            morse += '-';
+            currentLetter += '-';
           }
           
           lastEnd = tone.end;
         }
         
+        // Add last letter
+        if (currentLetter) {
+          morseSymbols.push(currentLetter);
+        }
+        
+        const morse = morseSymbols.join(' ');
+        console.log('Decoded morse:', morse);
+        
         // Decode morse to text
-        const text = morseToText(morse.trim());
-        resolve(text || '[Unable to decode]');
+        const text = morseToText(morse);
+        console.log('Decoded text:', text);
+        resolve(text || '[Unable to decode - check console]');
       } catch (error) {
         reject(error);
       }
