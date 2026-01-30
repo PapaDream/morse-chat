@@ -34,8 +34,10 @@ export function Sidebar({
       <div className="mb-6 flex items-center gap-2">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="text-terminal-orange flex-shrink-0">
           <circle cx="12" cy="12" r="2" fill="currentColor"/>
-          <circle cx="12" cy="12" r="5" stroke="currentColor" strokeWidth="2" opacity="0.6"/>
-          <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2" opacity="0.3"/>
+          <path d="M 8.5 8.5 Q 6 12 8.5 15.5" stroke="currentColor" strokeWidth="2" fill="none" opacity="0.7"/>
+          <path d="M 15.5 8.5 Q 18 12 15.5 15.5" stroke="currentColor" strokeWidth="2" fill="none" opacity="0.7"/>
+          <path d="M 5.5 5.5 Q 2 12 5.5 18.5" stroke="currentColor" strokeWidth="2" fill="none" opacity="0.4"/>
+          <path d="M 18.5 5.5 Q 22 12 18.5 18.5" stroke="currentColor" strokeWidth="2" fill="none" opacity="0.4"/>
         </svg>
         <h1 className="text-lg font-bold text-terminal-orange tracking-wider" style={{ textShadow: '0 0 15px rgba(255, 136, 0, 0.4)' }}>MORSE CHAT</h1>
       </div>
