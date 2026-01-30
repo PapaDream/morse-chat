@@ -17,6 +17,7 @@ function App() {
   const [outputDevice, setOutputDevice] = useState("default");
   const [autoScroll, setAutoScroll] = useState(true);
   const [soundEnabled, setSoundEnabled] = useState(true);
+  const [callSign, setCallSign] = useState("K1ABC");
 
   // Chat state
   const [messages, setMessages] = useState<Message[]>([
@@ -67,6 +68,8 @@ function App() {
         onAutoScrollChange={setAutoScroll}
         soundEnabled={soundEnabled}
         onSoundEnabledChange={setSoundEnabled}
+        callSign={callSign}
+        onCallSignChange={setCallSign}
       />
       <ChatArea
         messages={messages}

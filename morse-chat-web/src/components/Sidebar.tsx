@@ -1,3 +1,5 @@
+import { textToMorse } from '../utils/morse';
+
 interface SidebarProps {
   wpm: number;
   onWpmChange: (wpm: number) => void;
@@ -9,6 +11,8 @@ interface SidebarProps {
   onAutoScrollChange: (enabled: boolean) => void;
   soundEnabled: boolean;
   onSoundEnabledChange: (enabled: boolean) => void;
+  callSign: string;
+  onCallSignChange: (callSign: string) => void;
 }
 
 export function Sidebar({
@@ -22,6 +26,8 @@ export function Sidebar({
   onAutoScrollChange,
   soundEnabled,
   onSoundEnabledChange,
+  callSign,
+  onCallSignChange,
 }: SidebarProps) {
   return (
     <div className="w-64 bg-black border-r border-gray-900 flex flex-col p-4 font-mono">
@@ -110,8 +116,17 @@ export function Sidebar({
 
       {/* Callsign at bottom */}
       <div className="mt-auto pt-4 border-t border-gray-800">
-        <div className="text-center text-terminal-orange text-sm">
-          73 DE K1ABC
+        <div className="text-xs font-bold text-terminal-orange mb-2 uppercase tracking-wider text-center">Call Sign</div>
+        <input
+          type="text"
+          value={callSign}
+          onChange={(e) => onCallSignChange(e.target.value.toUpperCase())}
+          placeholder="K1ABC"
+          className="w-full bg-gray-800 text-terminal-orange border border-gray-700 rounded px-3 py-2 text-center text-sm font-bold mb-2 focus:outline-none focus:border-terminal-orange"
+        />
+        <div className="text-center text-xs text-gray-500 mb-1">73 DE {callSign}</div>
+        <div className="text-center text-xs text-gray-600 font-mono">
+          {textToMorse(callSign)}
         </div>
       </div>
     </div>
