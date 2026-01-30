@@ -56,7 +56,7 @@ function App() {
   };
 
   return (
-    <div className="flex h-screen w-full overflow-hidden">
+    <div className="flex flex-col md:flex-row h-screen w-full overflow-hidden">
       <Sidebar
         wpm={wpm}
         onWpmChange={setWpm}

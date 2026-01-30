@@ -122,7 +122,7 @@ export function ChatArea({ messages, onSendMessage, autoScroll, soundEnabled = t
   };
 
   return (
-    <div className="flex-1 flex flex-col bg-black font-mono">
+    <div className="flex-1 flex flex-col bg-black font-mono min-h-0">
       {/* Messages Area */}
       <div className="flex-1 overflow-y-auto p-4 bg-black">
         {messages.map((msg) => (

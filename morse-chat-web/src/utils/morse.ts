@@ -42,6 +42,12 @@ export function morseToText(morse: string): string {
 
 export function playMorseAudio(text: string, wpm: number = 20): AudioContext {
   const audioContext = new AudioContext();
+  
+  // Resume audio context for mobile browsers (requires user gesture)
+  if (audioContext.state === 'suspended') {
+    audioContext.resume();
+  }
+  
   const morse = textToMorse(text);
   
   // Timing calculations (PARIS standard)
