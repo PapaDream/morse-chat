@@ -32,7 +32,7 @@ export function Sidebar({
   return (
     <div className="w-64 bg-black border-r border-gray-900 flex flex-col p-4 font-mono">
       <div className="mb-6 flex items-center gap-2">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="text-terminal-orange flex-shrink-0">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="text-terminal-orange flex-shrink-0">
           <circle cx="12" cy="12" r="2" fill="currentColor"/>
           <circle cx="12" cy="12" r="5" stroke="currentColor" strokeWidth="2" opacity="0.6"/>
           <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2" opacity="0.3"/>
@@ -122,7 +122,7 @@ export function Sidebar({
           value={callSign}
           onChange={(e) => onCallSignChange(e.target.value.toUpperCase())}
           placeholder="K1ABC"
-          className="w-full bg-gray-800 text-terminal-orange border border-gray-700 rounded px-3 py-2 text-base font-bold mb-2 focus:outline-none focus:border-terminal-orange text-center"
+          className="w-full bg-gray-800 text-terminal-orange border border-gray-700 rounded px-3 py-2 text-lg font-bold mb-2 focus:outline-none focus:border-terminal-orange text-center"
         />
         <div className="text-xs text-gray-500 mb-1 text-center">73 DE {callSign}</div>
         <div className="text-sm text-gray-600 font-mono text-center">
