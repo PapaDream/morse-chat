@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import type { Message } from '../App';
-import { textToMorse, playMorseAudio } from '../utils/morse';
+import { textToMorse, playMorseAudio, downloadMorseAudio } from '../utils/morse';
 
 interface ChatAreaProps {
   messages: Message[];
@@ -50,6 +50,11 @@ export function ChatArea({ messages, onSendMessage, autoScroll, soundEnabled = t
       playMorseAudio(message, wpm);
     }
   };
+  
+  const handleDownload = (message: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    downloadMorseAudio(message, wpm);
+  };
 
   const formatTime = (date: Date) => {
     return date.toLocaleTimeString('en-US', { 
@@ -66,7 +71,7 @@ export function ChatArea({ messages, onSendMessage, autoScroll, soundEnabled = t
         {messages.map((msg) => (
           <div key={msg.id} className={`mb-3 flex ${msg.isOwn ? 'justify-end' : 'justify-start'}`}>
             <div 
-              className={`max-w-xl rounded-lg p-3 border ${
+              className={`max-w-xl rounded-lg p-3 border relative group ${
                 msg.isOwn 
                   ? 'bg-bubble-own border-orange-900' 
                   : 'bg-bubble-other border-gray-800'
@@ -74,13 +79,22 @@ export function ChatArea({ messages, onSendMessage, autoScroll, soundEnabled = t
               onClick={() => handleMessageClick(msg.message)}
               title={soundEnabled ? 'Click to hear Morse code' : ''}
             >
-              <div className="text-terminal-orange text-sm mb-1">
+              <button
+                onClick={(e) => handleDownload(msg.message, e)}
+                className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity text-terminal-orange hover:text-terminal-orange-hover p-1"
+                title="Download audio"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+                </svg>
+              </button>
+              <div className="text-terminal-orange text-sm mb-1 pr-6">
                 {msg.message}
               </div>
               <div className="text-xs text-gray-600 mb-2 font-mono">
                 {msg.morse}
               </div>
-              <div className="text-xs text-gray-700 text-right">
+              <div className="text-xs text-gray-500 text-right">
                 {formatTime(msg.timestamp)}
               </div>
             </div>
