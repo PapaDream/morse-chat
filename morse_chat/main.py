@@ -9,7 +9,7 @@ import wave
 from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
     QTextEdit, QLineEdit, QPushButton, QLabel, QComboBox, QSpinBox,
-    QGroupBox, QCheckBox, QFrame, QTextBrowser
+    QGroupBox, QCheckBox, QFrame, QTextBrowser, QSlider
 )
 from PyQt5.QtCore import Qt, QTimer, pyqtSignal
 from PyQt5.QtGui import QFont, QTextCursor, QTextCharFormat, QColor, QTextOption
@@ -146,7 +146,7 @@ class MorseChatWindow(QMainWindow):
         
         # Title
         title = QLabel("Settings")
-        title.setFont(QFont("Courier New", 18, QFont.Bold))
+        title.setFont(QFont("Courier New", 24, QFont.Bold))
         title.setStyleSheet("color: #ff8800; padding: 8px;")
         layout.addWidget(title)
         
@@ -170,30 +170,38 @@ class MorseChatWindow(QMainWindow):
         """)
         wpm_layout = QVBoxLayout()
         
-        wpm_label = QLabel("WPM:")
-        wpm_label.setStyleSheet("color: #ff8800; font-family: 'Courier New'; font-size: 14pt;")
-        self.wpm_spin = QSpinBox()
-        self.wpm_spin.setRange(5, 40)
-        self.wpm_spin.setValue(20)
-        self.wpm_spin.valueChanged.connect(self.update_wpm)
-        self.wpm_spin.setStyleSheet("""
-            QSpinBox {
-                background-color: #2a2a2a;
-                color: #ff8800;
-                border: 1px solid #000;
-                border-radius: 3px;
-                padding: 8px;
-                font-size: 14pt;
-                font-family: 'Courier New';
+        # Slider
+        self.wpm_slider = QSlider(Qt.Horizontal)
+        self.wpm_slider.setRange(10, 40)
+        self.wpm_slider.setValue(20)
+        self.wpm_slider.setTickPosition(QSlider.TicksBelow)
+        self.wpm_slider.setTickInterval(10)
+        self.wpm_slider.valueChanged.connect(self.update_wpm)
+        self.wpm_slider.setStyleSheet("""
+            QSlider::groove:horizontal {
+                background: #2a2a2a;
+                height: 8px;
+                border-radius: 4px;
             }
-            QSpinBox::up-button, QSpinBox::down-button {
-                background-color: #1a1a1a;
-                border: 1px solid #000;
+            QSlider::handle:horizontal {
+                background: #ff8800;
+                border: 2px solid #000;
+                width: 20px;
+                margin: -8px 0;
+                border-radius: 10px;
+            }
+            QSlider::handle:horizontal:hover {
+                background: #ff9920;
             }
         """)
         
-        wpm_layout.addWidget(wpm_label)
-        wpm_layout.addWidget(self.wpm_spin)
+        # Value label
+        self.wpm_value_label = QLabel("20 WPM")
+        self.wpm_value_label.setAlignment(Qt.AlignCenter)
+        self.wpm_value_label.setStyleSheet("color: #ff8800; font-family: 'Courier New'; font-size: 14pt; font-weight: bold;")
+        
+        wpm_layout.addWidget(self.wpm_slider)
+        wpm_layout.addWidget(self.wpm_value_label)
         wpm_layout.addSpacing(10)
         wpm_group.setLayout(wpm_layout)
         layout.addWidget(wpm_group)
@@ -399,6 +407,7 @@ class MorseChatWindow(QMainWindow):
         # Input area
         input_container = QWidget()
         input_layout = QVBoxLayout()
+        input_layout.setContentsMargins(10, 10, 10, 10)
         input_container.setLayout(input_layout)
         input_container.setStyleSheet("""
             QWidget {
@@ -407,12 +416,14 @@ class MorseChatWindow(QMainWindow):
                 border-top: 2px solid #000;
                 border-bottom-left-radius: 3px;
                 border-bottom-right-radius: 3px;
-                padding: 8px;
             }
         """)
         
-        # Text input
+        # Text input with embedded send button
         text_input_layout = QHBoxLayout()
+        text_input_layout.setSpacing(8)
+        text_input_layout.setContentsMargins(0, 0, 0, 0)
+        
         self.text_input = QLineEdit()
         self.text_input.setPlaceholderText("Type your message here...")
         self.text_input.returnPressed.connect(self.send_message)
@@ -422,7 +433,7 @@ class MorseChatWindow(QMainWindow):
                 color: #ff8800;
                 border: 2px solid #000;
                 border-radius: 3px;
-                padding: 15px;
+                padding: 15px 120px 15px 15px;
                 font-size: 18px;
                 font-family: 'Courier New';
                 font-weight: bold;
@@ -432,14 +443,15 @@ class MorseChatWindow(QMainWindow):
             }
         """)
         
-        send_button = QPushButton("Send")
+        send_button = QPushButton("SEND")
         send_button.clicked.connect(self.send_message)
+        send_button.setFixedWidth(100)
         send_button.setStyleSheet("""
             QPushButton {
                 background-color: #ff8800;
                 color: #000;
-                padding: 18px 35px;
-                font-size: 20px;
+                padding: 15px 20px;
+                font-size: 22px;
                 font-weight: bold;
                 font-family: 'Courier New';
                 border: 2px solid #000;
@@ -452,7 +464,6 @@ class MorseChatWindow(QMainWindow):
                 background-color: #dd7700;
             }
         """)
-        send_button.setMinimumWidth(120)
         
         text_input_layout.addWidget(self.text_input)
         text_input_layout.addWidget(send_button)
@@ -476,6 +487,7 @@ class MorseChatWindow(QMainWindow):
         self.wpm = wpm
         self.encoder = MorseEncoder(wpm=wpm)
         self.decoder = MorseDecoder(wpm=wpm)
+        self.wpm_value_label.setText(f"{wpm} WPM")
         self.statusBar().showMessage(f"WPM set to {wpm}")
     
     def toggle_abbreviate(self, state):
