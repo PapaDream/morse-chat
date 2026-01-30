@@ -1,5 +1,9 @@
 # Morse Chat
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![Release](https://img.shields.io/github/v/release/PapaDream/morse-chat)](https://github.com/PapaDream/morse-chat/releases)
+
 A desktop application for real-time Morse code (CW) audio transcription and transmission.
 
 Perfect for ham radio operators studying for their license or communicating via CW.
