@@ -13,7 +13,6 @@ interface ChatAreaProps {
 
 export function ChatArea({ messages, onSendMessage, autoScroll, soundEnabled = true, wpm = 20 }: ChatAreaProps) {
   const [input, setInput] = useState('');
-  const [morsePreview, setMorsePreview] = useState('');
   const [isDragging, setIsDragging] = useState(false);
   const [playingMessageId, setPlayingMessageId] = useState<string | null>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
@@ -24,14 +23,6 @@ export function ChatArea({ messages, onSendMessage, autoScroll, soundEnabled = t
       chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
   }, [messages, autoScroll]);
-
-  useEffect(() => {
-    if (input) {
-      setMorsePreview(textToMorse(input));
-    } else {
-      setMorsePreview('');
-    }
-  }, [input]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,7 +44,6 @@ export function ChatArea({ messages, onSendMessage, autoScroll, soundEnabled = t
       }
       
       setInput('');
-      setMorsePreview('');
     }
   };
   
