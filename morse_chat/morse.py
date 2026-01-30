@@ -205,9 +205,11 @@ class MorseEncoder:
             text: Text to encode as Morse code
             
         Returns:
-            Audio samples as bytes
+            WAV audio data as bytes
         """
         import numpy as np
+        import io
+        import wave
         
         morse = text_to_morse(text)
         samples = []
@@ -236,9 +238,19 @@ class MorseEncoder:
                 additional = (self.timing['word_gap_ms'] - self.timing['letter_gap_ms']) / 1000
                 samples.extend(self._generate_silence(additional))
         
-        # Convert to bytes
+        # Convert to 16-bit PCM
         audio_array = np.array(samples, dtype=np.float32)
-        return audio_array.tobytes()
+        audio_int16 = (audio_array * 32767).astype(np.int16)
+        
+        # Create WAV file in memory
+        wav_buffer = io.BytesIO()
+        with wave.open(wav_buffer, 'wb') as wf:
+            wf.setnchannels(1)  # Mono
+            wf.setsampwidth(2)  # 16-bit
+            wf.setframerate(self.sample_rate)
+            wf.writeframes(audio_int16.tobytes())
+        
+        return wav_buffer.getvalue()
     
     def _generate_tone(self, duration: float) -> list:
         """Generate tone samples."""

@@ -6,6 +6,14 @@ Morse Chat - Desktop application for CW transcription and transmission.
 import sys
 import io
 import wave
+import numpy as np
+import threading
+try:
+    import pyaudio
+    PYAUDIO_AVAILABLE = True
+except ImportError:
+    PYAUDIO_AVAILABLE = False
+
 from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
     QTextEdit, QLineEdit, QPushButton, QLabel, QComboBox, QSpinBox,
@@ -166,6 +174,7 @@ class MorseChatWindow(QMainWindow):
                 subcontrol-origin: margin;
                 left: 10px;
                 padding: 0 5px;
+                font-size: 18pt;
             }
         """)
         wpm_layout = QVBoxLayout()
@@ -223,6 +232,7 @@ class MorseChatWindow(QMainWindow):
                 subcontrol-origin: margin;
                 left: 10px;
                 padding: 0 5px;
+                font-size: 18pt;
             }
         """)
         audio_layout = QVBoxLayout()
@@ -304,6 +314,7 @@ class MorseChatWindow(QMainWindow):
                 subcontrol-origin: margin;
                 left: 10px;
                 padding: 0 5px;
+                font-size: 18pt;
             }
         """)
         options_layout = QVBoxLayout()
@@ -595,14 +606,45 @@ class MorseChatWindow(QMainWindow):
         try:
             message_id = int(anchor.replace('#', ''))
             if message_id in self.message_audio:
-                # TODO: Actually play the audio with PyAudio
-                # For now, just show a message
                 self.statusBar().showMessage(f"🔊 Playing Morse code audio...")
-                # Would use PyAudio here to play self.message_audio[message_id]
+                # Play audio in background thread to avoid blocking UI
+                audio_data = self.message_audio[message_id]
+                threading.Thread(target=self._play_audio_data, args=(audio_data,), daemon=True).start()
             else:
                 self.statusBar().showMessage("No audio available for this message")
         except ValueError:
             pass
+    
+    def _play_audio_data(self, audio_bytes):
+        """Play audio data using PyAudio."""
+        if not PYAUDIO_AVAILABLE:
+            return
+        
+        try:
+            # Read WAV data
+            with wave.open(io.BytesIO(audio_bytes), 'rb') as wf:
+                p = pyaudio.PyAudio()
+                
+                # Open stream
+                stream = p.open(
+                    format=p.get_format_from_width(wf.getsampwidth()),
+                    channels=wf.getnchannels(),
+                    rate=wf.getframerate(),
+                    output=True
+                )
+                
+                # Play audio
+                data = wf.readframes(1024)
+                while data:
+                    stream.write(data)
+                    data = wf.readframes(1024)
+                
+                # Cleanup
+                stream.stop_stream()
+                stream.close()
+                p.terminate()
+        except Exception as e:
+            print(f"Audio playback error: {e}")
 
 
 def main():
