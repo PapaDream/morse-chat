@@ -15,6 +15,8 @@ export function ChatArea({ messages, onSendMessage, autoScroll, soundEnabled = t
   const [input, setInput] = useState('');
   const [morsePreview, setMorsePreview] = useState('');
   const [isDragging, setIsDragging] = useState(false);
+  const [playingMessageId, setPlayingMessageId] = useState<string | null>(null);
+  const audioContextRef = useRef<AudioContext | null>(null);
   const chatEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -37,8 +39,16 @@ export function ChatArea({ messages, onSendMessage, autoScroll, soundEnabled = t
       const morse = textToMorse(input.trim());
       onSendMessage(input.trim(), morse);
       
+      // Stop any currently playing audio
+      if (audioContextRef.current) {
+        audioContextRef.current.close();
+        audioContextRef.current = null;
+      }
+      setPlayingMessageId(null);
+      
       // Play audio if enabled
       if (soundEnabled) {
+        // Don't store this one since it auto-plays
         playMorseAudio(input.trim(), wpm);
       }
       
@@ -47,10 +57,36 @@ export function ChatArea({ messages, onSendMessage, autoScroll, soundEnabled = t
     }
   };
   
-  const handleMessageClick = (message: string) => {
-    if (soundEnabled) {
-      playMorseAudio(message, wpm);
+  const handleMessageClick = (messageId: string, message: string) => {
+    if (!soundEnabled) return;
+    
+    // If this message is currently playing, stop it
+    if (playingMessageId === messageId) {
+      if (audioContextRef.current) {
+        audioContextRef.current.close();
+        audioContextRef.current = null;
+      }
+      setPlayingMessageId(null);
+      return;
     }
+    
+    // Stop any currently playing audio
+    if (audioContextRef.current) {
+      audioContextRef.current.close();
+    }
+    
+    // Play new audio
+    audioContextRef.current = playMorseAudio(message, wpm);
+    setPlayingMessageId(messageId);
+    
+    // Auto-clear playing state after audio finishes
+    // Estimate duration based on morse code length
+    const morse = textToMorse(message);
+    const ditDuration = 1.2 / wpm;
+    const estimatedDuration = morse.length * ditDuration * 2000; // rough estimate in ms
+    setTimeout(() => {
+      setPlayingMessageId(null);
+    }, estimatedDuration);
   };
   
   const handleDownload = (message: string, e: React.MouseEvent) => {
@@ -106,9 +142,11 @@ export function ChatArea({ messages, onSendMessage, autoScroll, soundEnabled = t
                 msg.isOwn 
                   ? 'bg-bubble-own border-orange-900' 
                   : 'bg-bubble-other border-gray-800'
-              } ${soundEnabled ? 'cursor-pointer hover:opacity-80' : ''}`}
-              onClick={() => handleMessageClick(msg.message)}
-              title={soundEnabled ? 'Click to hear Morse code' : ''}
+              } ${soundEnabled ? 'cursor-pointer hover:opacity-80' : ''} ${
+                playingMessageId === msg.id ? 'ring-2 ring-terminal-orange' : ''
+              }`}
+              onClick={() => handleMessageClick(msg.id, msg.message)}
+              title={soundEnabled ? (playingMessageId === msg.id ? 'Click to stop' : 'Click to hear Morse code') : ''}
             >
               <button
                 onClick={(e) => handleDownload(msg.message, e)}

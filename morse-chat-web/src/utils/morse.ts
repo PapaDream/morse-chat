@@ -40,7 +40,7 @@ export function morseToText(morse: string): string {
   }).join(' ');
 }
 
-export function playMorseAudio(text: string, wpm: number = 20): void {
+export function playMorseAudio(text: string, wpm: number = 20): AudioContext {
   const audioContext = new AudioContext();
   const morse = textToMorse(text);
   
@@ -73,6 +73,8 @@ export function playMorseAudio(text: string, wpm: number = 20): void {
       currentTime += wordGap - letterGap;
     }
   }
+  
+  return audioContext;
 }
 
 function playTone(
