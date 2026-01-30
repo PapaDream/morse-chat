@@ -41,7 +41,7 @@ export function Sidebar({
       </div>
       
       {/* Speed Section */}
-      <div className="mb-6">
+      <div className="mb-8">
         <h2 className="text-xs font-bold text-terminal-orange mb-2 uppercase tracking-wider">Speed (WPM)</h2>
         <div className="flex justify-between items-center text-xs text-gray-600 mb-1">
           <span>10</span>
@@ -62,7 +62,7 @@ export function Sidebar({
       </div>
 
       {/* Audio Section */}
-      <div className="mb-6">
+      <div className="mb-8">
         <h2 className="text-xs font-bold text-terminal-orange mb-2 uppercase tracking-wider">Audio Input</h2>
         <select
           value={inputDevice}
@@ -74,7 +74,7 @@ export function Sidebar({
       </div>
 
       {/* Audio Output Section */}
-      <div className="mb-6">
+      <div className="mb-8">
         <h2 className="text-xs font-bold text-terminal-orange mb-2 uppercase tracking-wider">Audio Output</h2>
         <select
           value={outputDevice}
@@ -86,7 +86,7 @@ export function Sidebar({
       </div>
 
       {/* Options Section */}
-      <div className="mb-6">
+      <div className="mb-8 mt-2">
         <label className="flex items-center justify-between mb-4 cursor-pointer">
           <span className="text-sm text-terminal-orange">Auto-Scroll</span>
           <div className="relative">
