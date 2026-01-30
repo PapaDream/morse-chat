@@ -349,7 +349,6 @@ class MorseChatWindow(QMainWindow):
         """)
         # Note: anchorClicked not available in all Qt versions
         # Audio playback on click will be implemented differently
-        self.chat_display.setOpenExternalLinks(False)
         layout.addWidget(self.chat_display)
         
         # Input area
