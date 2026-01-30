@@ -1,14 +1,16 @@
 import { useState, useEffect, useRef } from 'react';
 import type { Message } from '../App';
-import { textToMorse } from '../utils/morse';
+import { textToMorse, playMorseAudio } from '../utils/morse';
 
 interface ChatAreaProps {
   messages: Message[];
   onSendMessage: (message: string, morse: string) => void;
   autoScroll: boolean;
+  soundEnabled?: boolean;
+  wpm?: number;
 }
 
-export function ChatArea({ messages, onSendMessage, autoScroll }: ChatAreaProps) {
+export function ChatArea({ messages, onSendMessage, autoScroll, soundEnabled = true, wpm = 20 }: ChatAreaProps) {
   const [input, setInput] = useState('');
   const [morsePreview, setMorsePreview] = useState('');
   const chatEndRef = useRef<HTMLDivElement>(null);
@@ -32,8 +34,20 @@ export function ChatArea({ messages, onSendMessage, autoScroll }: ChatAreaProps)
     if (input.trim()) {
       const morse = textToMorse(input.trim());
       onSendMessage(input.trim(), morse);
+      
+      // Play audio if enabled
+      if (soundEnabled) {
+        playMorseAudio(input.trim(), wpm);
+      }
+      
       setInput('');
       setMorsePreview('');
+    }
+  };
+  
+  const handleMessageClick = (message: string) => {
+    if (soundEnabled) {
+      playMorseAudio(message, wpm);
     }
   };
 
@@ -58,7 +72,13 @@ export function ChatArea({ messages, onSendMessage, autoScroll }: ChatAreaProps)
               <span className={`font-bold ${msg.isOwn ? 'text-terminal-orange' : 'text-terminal-orange'}`}>
                 {msg.isOwn ? 'You' : 'Them'}:
               </span>
-              <span className="text-terminal-orange">{msg.message}</span>
+              <span 
+                className={`text-terminal-orange ${soundEnabled ? 'cursor-pointer hover:underline' : ''}`}
+                onClick={() => handleMessageClick(msg.message)}
+                title={soundEnabled ? 'Click to hear Morse code' : ''}
+              >
+                {msg.message}
+              </span>
             </div>
             <div className="text-xs text-terminal-orange-dim ml-12 mt-1">
               └─ {msg.morse}

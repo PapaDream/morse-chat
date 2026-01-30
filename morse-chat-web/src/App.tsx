@@ -72,6 +72,8 @@ function App() {
         messages={messages}
         onSendMessage={handleSendMessage}
         autoScroll={autoScroll}
+        soundEnabled={soundEnabled}
+        wpm={wpm}
       />
     </div>
   );
